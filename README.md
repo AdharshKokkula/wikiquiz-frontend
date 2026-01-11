@@ -145,16 +145,16 @@ Design Choice: We separate or use strict JSON formatting instructions to ensure 
 
 ---
 
-## Features Checklist
+## Features
 
-- [x] Backend API (FastAPI)
-- [x] Frontend UI (React + Two Tabs)
-- [x] Database Integration (PostgreSQL)
-- [x] Scraping Logic (BeautifulSoup)
-- [x] LLM Integration (Gemini)
-- [x] History View
-- [x] Entity Extraction
-- [x] Responsive Design
+- Backend API (FastAPI)
+- Frontend UI (React + Two Tabs)
+- Database Integration (PostgreSQL)
+- Scraping Logic (BeautifulSoup)
+- LLM Integration (Gemini)
+- History View
+- Entity Extraction
+- Responsive Design
 
 **Bonus Features Implemented:**
 - Caching (checks DB for existing URL)
