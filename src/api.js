@@ -1,31 +1,39 @@
 import axios from 'axios';
 
+// 1. Get the raw URL from env
+const ENV_URL = import.meta.env.VITE_API_URL;
+
+// 2. Logic to ensure it ends with /api
+let API_BASE = 'http://localhost:8000/api'; // Default
+
+if (ENV_URL) {
+    // Remove trailing slash if present to normalize
+    const normalized = ENV_URL.replace(/\/$/, '');
+    // Keep or add /api
+    API_BASE = normalized.endsWith('/api') ? normalized : `${normalized}/api`;
+}
+
 const API = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+    baseURL: API_BASE,
 });
 
-// Interceptor to add Token and handle Auth URL
+// Interceptor to add Token
 API.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
-
-    // If url starts with /auth, strip /api from baseURL by using a different instance or absolute URL?
-    // Easier: keep base as localhost:8000 and specify full path for auth, 
-    // OR just handle auth routes separately.
-
     return config;
 }, (error) => {
     return Promise.reject(error);
 });
 
-// Helper for Auth that bypasses the /api prefix if needed
-const BASE_URL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:8000';
+// 3. For public/auth routes (which are at /auth, not /api/auth)
+// We need the root URL. Since API_BASE is guaranteed to end with /api now, we strip it.
+const ROOT_URL = API_BASE.replace(/\/api$/, '');
 
 export const PublicAPI = axios.create({
-    baseURL: BASE_URL,
+    baseURL: ROOT_URL,
 });
 
-// Default instance tailored for /api
 export default API;
